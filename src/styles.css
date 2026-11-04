@@ -1,0 +1,184 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #162e38;
+  background: #f3f6f5;
+  line-height: 1.5;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+#app {
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px;
+}
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0;
+}
+h2 {
+  margin-top: 0;
+}
+header {
+  border-bottom: 4px solid #146b5b;
+  padding-bottom: 20px;
+}
+section {
+  background: white;
+  border: 1px solid #c4d3d0;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 16px 0;
+  min-width: 0;
+}
+.actions, .assignment {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.editors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+label {
+  display: block;
+  margin: 10px 0 3px;
+  font-weight: 600;
+}
+input, select, button {
+  font: inherit;
+  max-width: 100%;
+}
+input, select {
+  display: block;
+  padding: 9px;
+  width: 100%;
+  border: 1px solid #637d78;
+  border-radius: 4px;
+  background: white;
+  color: #162e38;
+}
+button {
+  padding: 9px 14px;
+  border: 1px solid #146b5b;
+  border-radius: 4px;
+  background: #146b5b;
+  color: white;
+  cursor: pointer;
+  margin: 5px 4px 5px 0;
+}
+/* Lock toggle: state shown by text marker and colour, not colour alone. */
+button[aria-pressed=false] {
+  background: white;
+  color: #146b5b;
+  border: 2px solid #146b5b;
+}
+button[aria-pressed=false]::before {
+  content: "○ ";
+}
+button[aria-pressed=true] {
+  background: #333c69;
+}
+button[aria-pressed=true]::before {
+  content: "✓ ";
+}
+:focus-visible {
+  outline: 3px solid #9a4b00;
+  outline-offset: 3px;
+}
+fieldset {
+  border: 1px solid #b6cac5;
+  margin: 14px 0;
+  min-width: 0;
+}
+legend {
+  font-weight: 700;
+}
+.error {
+  color: #a22020;
+  display: block;
+}
+[aria-invalid=true] {
+  border: 2px solid #a22020;
+}
+.status {
+  padding: 14px;
+  background: #e0efea;
+  border-left: 4px solid #146b5b;
+}
+.badge {
+  display: inline-block;
+  background: #ffedb2;
+  color: #513900;
+  padding: 4px 10px;
+}
+.shift-card {
+  border-top: 1px solid #b6cac5;
+  padding: 12px 0;
+}
+details {
+  margin: 12px 0;
+}
+summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.table-scroll {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+caption {
+  text-align: left;
+  font-weight: bold;
+}
+th, td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #c4d3d0;
+}
+@media (max-width: 640px) {
+  #app {
+    padding: 12px;
+  }
+  .editors {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  section {
+    padding: 14px;
+  }
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+nav a {
+  color: #146b5b;
+}
+.editors > details {
+  background: white;
+  padding: 12px;
+  min-width: 0;
+}
