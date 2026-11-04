@@ -260,7 +260,7 @@ export function mountApp(root: HTMLElement, deps: {
           return notify('Delete the shifts using this role first.');
         const next = plan.roles[plan.roles.indexOf(role) + 1];
         focusTarget = next ? `${next.id}:Role name` : 'page:Add role';
-        plan.roles = plan.roles.filter(role => role !== role);
+        plan.roles = plan.roles.filter(item => item !== role);
         commit();
       });
       roles.append(row);

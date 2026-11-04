@@ -7,7 +7,7 @@ import { createSamplePlan } from '../../src/core/sample.ts';
 import { solve } from '../../src/core/solver.ts';
 import { describeStatus, describeBlocker, describeGap } from '../../src/core/explain.ts';
 import { checkAssignment, buildIndex, explainUnfilled } from '../../src/core/constraints.ts';
-import { serializePlan, LIMITS } from '../../src/core/io.ts';
+import { parseSaveFile, serializePlan, LIMITS } from '../../src/core/io.ts';
 import type { EventPlan } from '../../src/core/types.ts';
 class MemoryStorage implements Storage {
   data = new Map<string, string>();
@@ -247,6 +247,31 @@ test('used role deletion is refused', () => {
     assert.equal(persisted(t.storage).roles.length, 1);
   }
   finally {
+    t.cleanup();
+  }
+});
+test('deleting an unused role preserves used roles, skill checks and portable saves', () => {
+  const source = basic();
+  source.roles[0]!.requiredSkills = ['first-aid'];
+  source.roles.push({ id: 'unused', name: 'Unused role', requiredSkills: [] });
+  source.volunteers.push({ ...source.volunteers[0]!, id: 'trained', name: 'Trained Person', skills: ['first-aid'] });
+  const t = setup(source);
+  try {
+    const unused = t.root.querySelector('[data-editor-id="unused"]')!;
+    t.click('Delete role', unused);
+    const remaining = persisted(t.storage);
+    assert.deepEqual(remaining.roles.map(role => role.id), ['r']);
+    assert.deepEqual(remaining.roles[0]!.requiredSkills, ['first-aid']);
+    assert.equal(remaining.shifts[0]!.roleId, 'r');
+    assert.ok(checkAssignment(remaining, [], 's', 'v').some(blocker => blocker.kind === 'missing-skill'));
+    assert.ok(parseSaveFile(serializePlan(remaining)).ok);
+    t.click('Generate roster');
+    assert.deepEqual(persisted(t.storage).assignments.map(assignment => assignment.volunteerId), ['trained']);
+    t.click('Export JSON');
+    const exported = parseSaveFile(t.downloads[0]!);
+    assert.ok(exported.ok);
+    assert.deepEqual(exported.plan, persisted(t.storage));
+  } finally {
     t.cleanup();
   }
 });
